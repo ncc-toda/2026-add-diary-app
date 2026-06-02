@@ -8,7 +8,7 @@
 最初に Expo アプリをスキャフォールドして、package.json などをコミットします。
 
 ```bash
-cd ~/projects/diary-app   # または自分の作業場所
+cd ~/projects/2026-add-diary-app   # または自分の作業場所
 nix develop
 pnpm create expo-app . --template default   # TypeScript テンプレート
 git add .
@@ -19,17 +19,6 @@ git push origin main
 > `pnpm create` で既存ファイル (`.envrc`, `flake.nix`, `justfile` 等) と
 > 衝突する場合は、必要に応じて手動でマージしてください。
 
-## setup.sh の差し替え
-
-`setup.sh` 冒頭のプレースホルダを置き換えます。
-
-| 変数 | 例 |
-| --- | --- |
-| `TEACHER_OWNER` | `your-github-org` |
-| `OPENCODE_EXTENSION_ID` | `company.opencode` (実際の拡張 ID) |
-
-`README.md` の GitHub owner も同じ値になっていることを確認してください。
-
 ## GitHub での配布
 
 1. GitHub にリポジトリを作成 (Public または生徒がアクセスできる権限)
@@ -37,7 +26,7 @@ git push origin main
 3. 生徒に以下のワンライナーを共有
 
 ```
-bash <(curl -fsSL https://raw.githubusercontent.com/ncc-toda/diary-app/main/setup.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/ncc-toda/2026-add-diary-app/main/setup.sh)
 ```
 
 ## Apple Developer
@@ -56,8 +45,8 @@ Expo Go で動かす前提なら **Firebase JS SDK** (`firebase` パッケージ
 WSL は不要。`flake.nix` が macOS にも対応しているので、以下だけでよい。
 
 ```bash
-git clone git@github.com:ncc-toda/diary-app.git
-cd diary-app
+git clone git@github.com:ncc-toda/2026-add-diary-app.git
+cd 2026-add-diary-app
 direnv allow      # 初回のみ
 just install
 just start
@@ -70,9 +59,9 @@ just start
 | `nix: command not found` | Nix インストール後にシェルを開き直していない | `which nix` / WSL を一度閉じて再度開く |
 | `direnv: error` | `direnv allow` 未実行 | `direnv status` |
 | Expo Go で繋がらない | LAN モードが学校 Wi-Fi で機能しない | `just start` (tunnel) に切り替え |
-| `pnpm install` が極端に遅い | `/mnt/c/...` 配下で作業している | プロジェクトを `~/projects/diary-app` に移動 |
+| `pnpm install` が極端に遅い | `/mnt/c/...` 配下で作業している | プロジェクトを `~/projects/2026-add-diary-app` に移動 |
 | `gh: command not found` | `setup.sh` のインストールが途中で失敗 | `setup.sh` を再実行 |
-| VS Code が Windows モードで開く | WSL 内で `code .` していない | WSL の bash から `cd ~/projects/diary-app && code .` |
+| VS Code が Windows モードで開く | WSL 内で `code .` していない | WSL の bash から `cd ~/projects/2026-add-diary-app && code .` |
 
 ## 配布物の更新
 

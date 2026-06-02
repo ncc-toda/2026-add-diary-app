@@ -5,23 +5,17 @@ set -euo pipefail
 # Diary App Hands-on Setup Script
 #
 # Usage (in WSL Ubuntu):
-#   bash <(curl -fsSL https://raw.githubusercontent.com/ncc-toda/diary-app/main/setup.sh)
+#   bash <(curl -fsSL https://raw.githubusercontent.com/ncc-toda/2026-add-diary-app/main/setup.sh)
 #
-# Optional: put the project somewhere other than ~/projects/diary-app
+# Optional: put the project somewhere other than ~/projects/2026-add-diary-app
 #   PROJECT_DIR=~/work/diary-app bash <(curl -fsSL ...)
 # ============================================================
 
 # ----- configurable -----------------------------------------
 
-TEACHER_OWNER="ncc-toda"          # GitHub org / user that owns the upstream repo
-REPO_NAME="diary-app"
-
 # Allow override from environment (see usage above)
 PROJECT_PARENT_DIR="${PROJECT_PARENT_DIR:-$HOME/projects}"
-PROJECT_DIR="${PROJECT_DIR:-$PROJECT_PARENT_DIR/$REPO_NAME}"
-
-# opencode extension id. Replace with the real id, e.g. "company.opencode"
-OPENCODE_EXTENSION_ID="${OPENCODE_EXTENSION_ID:-REPLACE_WITH_OPENCODE_EXTENSION_ID}"
+PROJECT_DIR="${PROJECT_DIR:-$PROJECT_PARENT_DIR/2026-add-diary-app}"
 
 # ----- helpers ----------------------------------------------
 
@@ -80,24 +74,15 @@ gh auth status >/dev/null 2>&1 || gh auth login
 # Fork + Clone (idempotent)
 # ============================================================
 
-mkdir -p "$PROJECT_PARENT_DIR"
+mkdir -p "$(dirname "$PROJECT_DIR")"
 
 if [ ! -d "$PROJECT_DIR/.git" ]; then
   info "リポジトリを fork して clone します -> $PROJECT_DIR"
 
-  # gh は CWD に clone するので、parent dir に降りてから実行する
-  pushd "$PROJECT_PARENT_DIR" >/dev/null
-
-  gh repo fork "$TEACHER_OWNER/$REPO_NAME" \
+  gh repo fork ncc-toda/2026-add-diary-app \
     --clone \
-    --default-branch-only
-
-  # fork 後の clone 名がプロジェクト名と一致しない可能性に備える
-  if [ ! -d "$PROJECT_DIR" ] && [ -d "$REPO_NAME" ]; then
-    : # already correct
-  fi
-
-  popd >/dev/null
+    --default-branch-only \
+    -- "$PROJECT_DIR"
 else
   info "リポジトリは既に存在します: $PROJECT_DIR"
 fi
@@ -167,12 +152,7 @@ if command -v code >/dev/null 2>&1; then
   code --install-extension usernamehw.errorlens          || true
   code --install-extension expo.vscode-expo-tools        || true
   code --install-extension mkhl.direnv                   || true
-
-  if [ "$OPENCODE_EXTENSION_ID" != "REPLACE_WITH_OPENCODE_EXTENSION_ID" ]; then
-    code --install-extension "$OPENCODE_EXTENSION_ID" || true
-  else
-    warn "OPENCODE_EXTENSION_ID が未設定です。手動でインストールしてください。"
-  fi
+  code --install-extension sst-dev.opencode              || true
 else
   warn "code コマンドが見つかりません。VS Code の 'Shell Command: Install code command in PATH' を実行してください。"
 fi
