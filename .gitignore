@@ -60,3 +60,6 @@ example
 # Nix
 result
 result-*
+
+# environment variables
+.env
