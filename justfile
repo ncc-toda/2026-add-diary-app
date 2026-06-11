@@ -61,6 +61,7 @@ build-list:
 # ============================================================
 
 sync-upstream:
+    git config merge.ours.driver true
     git pull upstream main
 
 # ============================================================
